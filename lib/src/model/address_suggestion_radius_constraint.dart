@@ -1,28 +1,29 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'address_suggestion_radius_constraint.g.dart';
 
 /// Used to limit the search for suggested addresses with the radius around
 /// a coordinate point.
-@JsonSerializable(explicitToJson: true, nullable: true)
+@JsonSerializable(explicitToJson: true)
 class AddressSuggestionRadiusConstraint {
   @JsonKey(name: "lat", required: true)
-  double latitude;
+  late double latitude;
 
   @JsonKey(name: "lon", required: true)
-  double longitude;
+  late double longitude;
 
-  int _radiusMeters = 100;
-
-  @JsonKey(name: "radius_meters")
-  int get radiusMeters => _radiusMeters;
+  int? _radiusMeters = 100;
 
   @JsonKey(name: "radius_meters")
-  set radiusMeters(int value) {
-    if (value < 0) {
+  int? get radiusMeters => _radiusMeters;
+
+  @JsonKey(name: "radius_meters")
+  set radiusMeters(int? value) {
+    if (value != null && value < 0) {
       _radiusMeters = 0;
       return;
     }
-    if (value > 100000) {
+    if (value != null && value > 100000) {
       _radiusMeters = 100000;
       return;
     }
@@ -35,13 +36,12 @@ class AddressSuggestionRadiusConstraint {
   /// [radiusMeters] is optional and would be equal to 100 metres if not provided.
   /// Radius limited to 100 000 metres and would be set with this value if exceeded.
   AddressSuggestionRadiusConstraint({
-    this.latitude,
-    this.longitude,
-    int radiusMeters,
+    required this.latitude,
+    required this.longitude,
+    int? radiusMeters,
   }) : this._radiusMeters = radiusMeters;
 
-  AddressSuggestionRadiusConstraint.fromString(String latLon,
-      {String delimiter = ','}) {
+  AddressSuggestionRadiusConstraint.fromString(String latLon, {String delimiter = ','}) {
     final llParts = latLon.split(delimiter);
     if (llParts.length != 2) {
       throw 'Query string can not be split: wrong format or delimiter';
@@ -57,10 +57,8 @@ class AddressSuggestionRadiusConstraint {
     );
   }
 
-  factory AddressSuggestionRadiusConstraint.fromJson(
-          Map<String, dynamic> json) =>
+  factory AddressSuggestionRadiusConstraint.fromJson(Map<String, dynamic> json) =>
       _$AddressSuggestionRadiusConstraintFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$AddressSuggestionRadiusConstraintToJson(this);
+  Map<String, dynamic> toJson() => _$AddressSuggestionRadiusConstraintToJson(this);
 }
