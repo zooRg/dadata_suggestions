@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'address_suggestion_constraint.dart';
@@ -31,7 +33,7 @@ class AddressSuggestionRequest {
   LevelBoundry? _upperBoundary;
   LevelBoundry? _lowerBoundary;
 
-  @JsonKey(name: 'from_bound')
+  @JsonKey(name: 'from_bound', toJson: _levelBoundryToJson)
   String? get upperBoundary {
     return _upperBoundary?.value;
   }
@@ -49,7 +51,7 @@ class AddressSuggestionRequest {
     _upperBoundary = null;
   }
 
-  @JsonKey(name: 'to_bound')
+  @JsonKey(name: 'to_bound', toJson: _levelBoundryToJson)
   String? get lowerBoundary {
     return _lowerBoundary?.value;
   }
@@ -86,3 +88,5 @@ class AddressSuggestionRequest {
 
   Map<String, dynamic> toJson() => _$AddressSuggestionRequestToJson(this);
 }
+
+Map<String, dynamic> _levelBoundryToJson(String? levelBoundry) => <String, dynamic>{'value': levelBoundry};
