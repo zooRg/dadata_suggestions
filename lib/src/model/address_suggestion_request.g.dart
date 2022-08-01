@@ -45,8 +45,8 @@ Map<String, dynamic> _$AddressSuggestionRequestToJson(
           instance.radiusConstraints?.map((e) => e.toJson()).toList(),
       'locations_boost':
           instance.locationsPriority?.map((e) => e.toJson()).toList(),
-      'from_bound': instance.upperBoundary,
-      'to_bound': instance.lowerBoundary,
+      'from_bound': _levelBoundryToJson(instance.upperBoundary),
+      'to_bound': _levelBoundryToJson(instance.lowerBoundary),
     };
 
 const _$LevelBoundryEnumMap = {
